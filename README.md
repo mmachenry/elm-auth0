@@ -12,6 +12,8 @@ Then code was added using this tutorial for Auth0: https://auth0.com/docs/librar
     npm install @auth0/auth0-spa-js
     # Then edit some code
 
+Note, these are the versions of code that I'm using for this project.
+
     npm --version
     6.14.8
     npx parcel --version
