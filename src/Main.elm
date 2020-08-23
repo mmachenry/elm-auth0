@@ -41,6 +41,7 @@ subscriptions _ = updateUserAndToken UpdateUserAndToken
 view : Model -> Html Msg
 view model = Html.div [] [
   text ("Hello World" ++ Debug.toString model),
-  button [onClick Login] [ text "Login" ],
-  button [onClick Logout] [ text "Logout"]
+  case model.token of
+    Nothing -> button [onClick Login] [ text "Login" ]
+    Just token -> button [onClick Logout] [ text "Logout"]
   ]
