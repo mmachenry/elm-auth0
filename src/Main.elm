@@ -1,7 +1,8 @@
 port module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, text, button)
+import Html exposing (Html, div, text, button, img)
+import Html.Attributes exposing (src)
 import Html.Events exposing (onClick)
 import Json.Decode as Decode
 
@@ -27,7 +28,11 @@ type alias LoginData = {
     token : String
     }
 
-type alias User = Bool
+type alias User = {
+    name : String,
+    email : String,
+    picture : String
+    }
 
 init : () -> (Model, Cmd Msg)
 init flags = ({ error = "", loginData = Nothing }, Cmd.none)
@@ -51,12 +56,14 @@ subscriptions : Model -> Sub Msg
 subscriptions _ = updateLoginData UpdateLoginData
 
 view : Model -> Html Msg
-view model = Html.div [] [
-  text ("Hello World" ++ Debug.toString model),
+view model =
   case model.loginData of
     Nothing -> button [onClick Login] [ text "Login" ]
-    Just _ -> button [onClick Logout] [ text "Logout"]
-  ]
+    Just ld -> div [] [
+        div [] [text ("Welcome, " ++ ld.user.name)],
+        Html.img [src ld.user.picture] [],
+        div [] [button [onClick Logout] [ text "Logout"]]
+        ]
 
 loginData : Decode.Decoder LoginData
 loginData =
@@ -65,4 +72,7 @@ loginData =
       (Decode.field "token" Decode.string)
 
 user : Decode.Decoder User
-user = Decode.succeed True
+user = Decode.map3 User
+    (Decode.field "name" Decode.string)
+    (Decode.field "email" Decode.string)
+    (Decode.field "picture" Decode.string)
