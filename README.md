@@ -1,98 +1,14 @@
-To start
+Introduction
 ---
 
-Project was created following this tutorial for Elm and Parcel: https://benpaulhanna.com/building-an-elm-project-with-parcel.html
+This project is a simple Elm example of using Auth0 to authenticate a user
+login. I use the @auth0/auth0-spa-js Javascript library and handle the
+authentication workflow in Javascript and pass the token in through ports
+allong with loging and logout messages.
 
-    npm init
-    npm install --save parcel
-    # Then edit some code
-
-Then code was added using this tutorial for Auth0: https://auth0.com/docs/libraries/auth0-single-page-app-sdk#create-the-client
-
-    npm install @auth0/auth0-spa-js
-    # Then edit some code
-
-Note, these are the versions of code that I'm using for this project.
-
-    npm --version
-    6.14.8
-    npx parcel --version
-    1.12.4
-    elm --version
-    0.19.1
-
-Note that Elm is installed globally in /usr/local/bin though it might not
-be in use for this project since parcel is installing Elm
-
-Problem 1: Source maps are broken
+Inspiration
 ---
 
-Run the server with this command.
+The authentication code comes largely from auth0's documentation. Particularly their [quick start guide for vanilla Javascript SPA](https://auth0.com/docs/quickstart/spa/vanillajs/01-login) as well as their [SPA SDK dodocs](https://auth0.com/docs/libraries/auth0-single-page-app-sdk)
 
-    npx parcel --no-source-maps src/index.html 
-
-The server displays this error message.
-
-    16 | //# sourceMappingURL=auth0-spa-js.production.esm.js.map
-    17 | 
-    Could not load existing sourcemap of "../node_modules/@auth0/auth0-spa-js/dist/auth0-spa-js.production.esm.js".
-
-Most if not all references to this on line are bug reports from several
-years ago. Not sure if it's ever been addressed. I found a work around to
-remove source maps but that might not be the best idea.
-
-Problem 2: Hot load is broken
----
-
-I consistently get weird behavior when hot loading from changes made to
-the source when editing code. Either the hot load does nothing and the
-server continues to run the old code, or often I get the following odd
-error message.
-
-Run the server with this command.
-
-    npx parcel --no-source-maps src/index.html 
-
-Server runs fine with this output.
-
-    Server running at http://localhost:1234 
-
-
-Next go to src/main.js and introduce a typo in the import. Change the
-import on line 2 by removing the 't' in Client to become
-
-    import createAuth0Clien from '@auth0/auth0-spa-js';
-
-The server's error output will display this and I have no idea what this
-means. It's unrecoverable and will stop hot loading any changes until
-rerun.
-
-    Cannot read property 'type' of undefined
-        at Bundler.createBundleTree (/home/mmachenry/src/elm-auth0/node_modules/parcel/src/Bundler.js:654:54)
-        at Bundler.createBundleTree (/home/mmachenry/src/elm-auth0/node_modules/parcel/src/Bundler.js:721:12)
-        at Bundler.bundle (/home/mmachenry/src/elm-auth0/node_modules/parcel/src/Bundler.js:298:14)
-        at processTicksAndRejections (internal/process/task_queues.js:93:5)
-
-You can control-c the server and restart and it will run the app as normal.
-
-Problem 3: Page hangs with blank output uppon adding Auth0 connection.
----
-
-Run the server with this command.
-
-    npx parcel --no-source-maps src/index.html 
-
-Edit src/main.js to uncomment and reinstate this block of code.
-
-    const auth0 = await createAuth0Client({
-      domain: 'YOUR_DOMAIN',
-      client_id: 'YOUR_CLIENT_ID'
-    });
-
-Notice the same weird "property 'type'" error from above, however...
-
-Use control-C to close the server and rerun it from the exact same code.
-Server runs just fine, but the web app now displays a blank screen instead
-of the proper Hello, World. Note that this behavior is the same when I
-have changed the YOUR_DOMAIN and YOUR_CLIENT_ID to valid values from my
-Auth0 project.
+In addition the project was built with Parcel following [their docs](https://parceljs.org/elm.html) Note that Parcel is very finicky unless your editor is behaving as it expects. Check out their documentation on [hot module reload](https://parceljs.org/hmr.html)
