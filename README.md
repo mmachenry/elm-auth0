@@ -3,23 +3,26 @@ To start
 
 Project was created following this tutorial for Elm and Parcel: https://benpaulhanna.com/building-an-elm-project-with-parcel.html
 
-   npm init
-   npm install --save parcel
-   # Then edit some code
+    npm init
+    npm install --save parcel
+    # Then edit some code
 
 Then code was added using this tutorial for Auth0: https://auth0.com/docs/libraries/auth0-single-page-app-sdk#create-the-client
 
-   npm install @auth0/auth0-spa-js
-   # Then edit some code
+    npm install @auth0/auth0-spa-js
+    # Then edit some code
 
     npm --version
     6.14.8
     npx parcel --version
     1.12.4
-    elm --version # this is installed globally in /usr/local/bin though it might not be in use for this project
+    elm --version
     0.19.1
 
-Source maps are broken
+Note that Elm is installed globally in /usr/local/bin though it might not
+be in use for this project since parcel is installing Elm
+
+Problem 1: Source maps are broken
 ---
 
 Run the server with this command.
@@ -36,8 +39,13 @@ Most if not all references to this on line are bug reports from several
 years ago. Not sure if it's ever been addressed. I found a work around to
 remove source maps but that might not be the best idea.
 
-Weird error output when importing invalid Javascript objects.
+Problem 2: Hot load is broken
 ---
+
+I consistently get weird behavior when hot loading from changes made to
+the source when editing code. Either the hot load does nothing and the
+server continues to run the old code, or often I get the following odd
+error message.
 
 Run the server with this command.
 
@@ -63,9 +71,9 @@ rerun.
         at Bundler.bundle (/home/mmachenry/src/elm-auth0/node_modules/parcel/src/Bundler.js:298:14)
         at processTicksAndRejections (internal/process/task_queues.js:93:5)
 
-It appears that hot loading is just broken.
+You can control-c the server and restart and it will run the app as normal.
 
-Page hangs with blank output uppon adding Auth0 connection.
+Problem 3: Page hangs with blank output uppon adding Auth0 connection.
 ---
 
 Run the server with this command.
@@ -79,9 +87,10 @@ Edit src/main.js to uncomment and reinstate this block of code.
       client_id: 'YOUR_CLIENT_ID'
     });
 
-Notice the same weird "property 'type'" error from above, however... use
-control-C to close the server and rerun it from the exact same code. Server
-runs just fine, but the web app now displays a blank screen instead of the
-proper Hello, World. Note that this behavior is the same when I have
-changed the YOUR_DOMAIN and YOUR_CLIENT_ID to valid values from my Auth0
-project.
+Notice the same weird "property 'type'" error from above, however...
+
+Use control-C to close the server and rerun it from the exact same code.
+Server runs just fine, but the web app now displays a blank screen instead
+of the proper Hello, World. Note that this behavior is the same when I
+have changed the YOUR_DOMAIN and YOUR_CLIENT_ID to valid values from my
+Auth0 project.
