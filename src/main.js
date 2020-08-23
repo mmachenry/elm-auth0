@@ -29,8 +29,7 @@ const updateApp = async () => {
     if (isAuthenticated) {
         const user = await auth0.getUser()
         const token = await auth0.getTokenSilently()
-        app.ports.updateUserAndToken.send(token)
-        //app.ports.updateUserAndToken.send({user: user, token: token})
+        app.ports.updateLoginData.send({user: user, token: token})
     }
 }
 
